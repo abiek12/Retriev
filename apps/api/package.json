@@ -4,7 +4,10 @@
     "dev": "bun run --hot src/index.ts"
   },
   "dependencies": {
-    "hono": "^4.12.30"
+    "@langchain/community": "^1.1.29",
+    "@langchain/core": "^1.2.3",
+    "hono": "^4.12.30",
+    "pdf-parse": "^2.4.5"
   },
   "devDependencies": {
     "@types/bun": "latest"
