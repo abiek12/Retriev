@@ -1,3 +1,4 @@
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { FileTypes } from "./utils/enums";
 import { FileLoader } from "./utils/interfaces";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf"
@@ -17,7 +18,7 @@ class TextLoader implements FileLoader {
   }
 }
 
-export class fileLoaderFactory {
+export class filePrepareFactory {
   private constructor() { }
 
   public static createFileLoader(type: FileTypes): FileLoader {
@@ -29,5 +30,23 @@ export class fileLoaderFactory {
       default:
         throw new Error("Invalid file type!")
     }
-  }
+  };
 }
+
+export class ChunkFile {
+  constructor(
+    chunkSize: number,
+    chunkOverlap: number
+  ) {
+    this.splitter = new RecursiveCharacterTextSplitter({
+      chunkSize: chunkSize,
+      chunkOverlap: chunkOverlap
+    })
+  }
+
+  private splitter;
+
+  public textSplitter(content: string) {
+    return this.splitter.splitText(content);
+  }
+};
