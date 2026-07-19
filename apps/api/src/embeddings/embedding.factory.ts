@@ -19,4 +19,6 @@ class EmbeddingFactory {
 
     return this.instance;
   }
-}
+};
+
+export default EmbeddingFactory;

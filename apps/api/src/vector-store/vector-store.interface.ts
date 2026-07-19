@@ -1,5 +1,4 @@
 export interface IVectorStore {
-  connect(): Promise<void>;
-
-  addDocuments(chunks: any[]): Promise<void>
+  addDocuments(chunks: any[]): Promise<void>;
+  similaritySearch(query: string): Promise<any[]>;
 };

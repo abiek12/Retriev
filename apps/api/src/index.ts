@@ -1,13 +1,12 @@
 import { Hono } from 'hono'
 import { FileTypes } from './utils/enums'
 import { ChunkFile, filePrepareFactory } from './prepare';
-import { OpenAIEmbeddings } from '@langchain/openai';
-import { PineconeStore } from "@langchain/pinecone";
-import { Pinecone as PineconeClient } from "@pinecone-database/pinecone";
+import EmbeddingFactory from './embeddings/embedding.factory';
+import { EmbeddingsModelConfig } from './embeddings/embedding.types';
 
 const app = new Hono()
 
-app.get('/', async (c) => {
+app.get('/index', async (c) => {
   const contentSplitter = new ChunkFile(500, 100);
 
   const loader = filePrepareFactory.createFileLoader(FileTypes.PDF);
@@ -17,12 +16,9 @@ app.get('/', async (c) => {
 
   const chunks = await contentSplitter.textSplitter(fileContent);
 
-  const pinecone = new PineconeClient();
-  const pineconeIndex = pinecone.index(process.env.PINECONE_INDEX!);
-  const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
-    pineconeIndex,
-    maxConcurrency: 5
-  });
+  // Embeddings
+  const embeddingProvider = EmbeddingFactory.getInstance(EmbeddingsModelConfig.OPENAI);
+  const embeddings = await embeddingProvider.embedDocumentChunks(chunks);
 
   return c.json(chunks);
 })

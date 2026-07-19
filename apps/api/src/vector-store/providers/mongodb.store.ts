@@ -1,13 +1,17 @@
-import { IVectorStore } from "../../utils/interfaces";
+import { IVectorStore } from "../vector-store.interface";
 
 class MongoVectorStore implements IVectorStore {
-  async connect(): Promise<void> {
-    console.log("Mongo vector connnected!")
-  }
 
   async addDocuments(chunks: any[]): Promise<void> {
     console.log("Document added!")
   }
+
+  async similaritySearch(query: string): Promise<any[]> {
+    console.log("Document got!");
+    return new Promise(() => {
+      return ['1']
+    })
+  };
 };
 
 export default MongoVectorStore;

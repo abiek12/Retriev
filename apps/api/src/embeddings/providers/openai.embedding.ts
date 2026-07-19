@@ -1,20 +1,32 @@
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { IEmbeddingsProvider } from "../embedding.interface";
+import OpenAI from "openai";
+import { env } from "../../config/env";
 
 class OpenAIEmbeddingProvider implements IEmbeddingsProvider {
-  private embeddings = new OpenAIEmbeddings({
-    model: process.env.OPENAI_EMBEDDING_MODEL
-  });
+  private openai = new OpenAI();
 
-  embedDocument(text: string): Promise<number[]> {
-    console.log("embeded doc");
+  async embedDocument(text: string): Promise<number[]> {
+    const response = await this.openai.embeddings.create({
+      model: env.embeddingModel,
+      input: text,
+      encoding_format: 'float'
+    });
 
-    return new Promise(() => {
-      return [1,2]
-    })
+    return response.data[0].embedding;
   }
 
-  embedQuery(text: string): Promise<number[]> {
+  async embedDocumentChunks(chunks: string[]): Promise<any[]> {
+    const response = await this.openai.embeddings.create({
+      model: env.embeddingModel,
+      input: chunks,
+      encoding_format: 'float'
+    });
+
+    return response.data;
+  }
+
+  async embedQuery(text: string): Promise<number[]> {
     console.log("embeded query");
 
     return new Promise(() => {
