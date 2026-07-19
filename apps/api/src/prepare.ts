@@ -1,9 +1,9 @@
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { FileTypes } from "./utils/enums";
-import { FileLoader } from "./utils/interfaces";
+import { IFileLoader } from "./utils/interfaces";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf"
 
-class PdfLoader implements FileLoader {
+class PdfLoader implements IFileLoader {
   async load(filePath: string):Promise<any> {
     const loader = new PDFLoader(filePath, {splitPages: false});
     const doc = await loader.load();
@@ -12,7 +12,7 @@ class PdfLoader implements FileLoader {
   }
 }
 
-class TextLoader implements FileLoader {
+class TextLoader implements IFileLoader {
   load(filePath: string): any {
     return ['text content']
   }
@@ -21,7 +21,7 @@ class TextLoader implements FileLoader {
 export class filePrepareFactory {
   private constructor() { }
 
-  public static createFileLoader(type: FileTypes): FileLoader {
+  public static createFileLoader(type: FileTypes): IFileLoader {
     switch(type) {
       case FileTypes.PDF:
         return new PdfLoader();

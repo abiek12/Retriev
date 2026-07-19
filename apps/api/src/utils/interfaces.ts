@@ -1,3 +1,3 @@
-export interface FileLoader {
+export interface IFileLoader {
   load(filePath: string): Promise<any>;
-}
+};
