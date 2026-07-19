@@ -4,10 +4,10 @@ import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf"
 
 class PdfLoader implements FileLoader {
   async load(filePath: string):Promise<any> {
-    const loader = new PDFLoader(filePath);
-    const docs = await loader.load();
+    const loader = new PDFLoader(filePath, {splitPages: false});
+    const doc = await loader.load();
 
-    return docs;
+    return doc[0].pageContent;
   }
 }
 
