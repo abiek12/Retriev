@@ -17,11 +17,6 @@ app.get('/', async (c) => {
 
   const chunks = await contentSplitter.textSplitter(fileContent);
 
-  // Embeddings
-  const embeddings = new OpenAIEmbeddings({
-    model: "text-embedding-3-small"
-  });
-
   const pinecone = new PineconeClient();
   const pineconeIndex = pinecone.index(process.env.PINECONE_INDEX!);
   const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
