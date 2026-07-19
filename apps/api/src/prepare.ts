@@ -41,12 +41,12 @@ export class ChunkFile {
     this.splitter = new RecursiveCharacterTextSplitter({
       chunkSize: chunkSize,
       chunkOverlap: chunkOverlap
-    })
+    });
   }
 
   private splitter;
 
-  public textSplitter(content: string) {
-    return this.splitter.splitText(content);
+  public async textSplitter(content: string) {
+    return await this.splitter.splitText(content);
   }
 };
