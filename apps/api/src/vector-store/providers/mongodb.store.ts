@@ -6,7 +6,7 @@ class MongoVectorStore implements IVectorStore {
     console.log("Document added!")
   }
 
-  async similaritySearch(query: string): Promise<any[]> {
+  async similaritySearch(query: number[]): Promise<any> {
     console.log("Document got!");
     return new Promise(() => {
       return ['1']

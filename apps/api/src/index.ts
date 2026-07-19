@@ -3,6 +3,8 @@ import { FileTypes } from './utils/enums'
 import { ChunkFile, filePrepareFactory } from './prepare';
 import EmbeddingFactory from './embeddings/embedding.factory';
 import { EmbeddingsModelConfig } from './embeddings/embedding.types';
+import VectorStoreFactory from './vector-store/vector-store.factory';
+import { VectorStoreConfig } from './vector-store/vector-store.types';
 
 const app = new Hono()
 
@@ -20,7 +22,15 @@ app.get('/index', async (c) => {
   const embeddingProvider = EmbeddingFactory.getInstance(EmbeddingsModelConfig.OPENAI);
   const embeddings = await embeddingProvider.embedDocumentChunks(chunks);
 
-  return c.json(chunks);
+  // Store in vector store
+  const vectorStoreProvider = VectorStoreFactory.getInstance(VectorStoreConfig.PINECONE);
+  await vectorStoreProvider.addDocuments(embeddings)
+
+  return c.json({
+    success: true,
+    statusCode: 200,
+    message: "Document indexed successfully!"
+  });
 })
 
 export default app;
