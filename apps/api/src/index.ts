@@ -28,12 +28,19 @@ app.get('/index', async (c) => {
     throw new Error("error while embeddings");
   }
 
-  console.log(embeddings.length);
+  // prepare vector
+  const vectors = chunks.map((chunk, index) => ({
+    id: crypto.randomUUID(),
+    value: embeddings[index],
+    metadata: {
+      text: chunk
+    }
+  }));
 
   // Store in vector store
   const vectorStoreProvider = VectorStoreFactory.getInstance(VectorStoreConfig.PINECONE);
   try {
-    await vectorStoreProvider.addDocuments(embeddings);
+    await vectorStoreProvider.addDocuments(vectors);
   } catch (err) {
     console.log("Error while store embeddings to store: ", err);
     throw new Error("Error while store embeddings to store");
