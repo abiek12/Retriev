@@ -31,7 +31,7 @@ app.get('/index', async (c) => {
   // prepare vector
   const vectors = chunks.map((chunk, index) => ({
     id: crypto.randomUUID(),
-    value: embeddings[index],
+    values: embeddings[index],
     metadata: {
       text: chunk
     }
