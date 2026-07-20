@@ -20,11 +20,24 @@ app.get('/index', async (c) => {
 
   // Embeddings
   const embeddingProvider = EmbeddingFactory.getInstance(EmbeddingsModelConfig.OPENAI);
-  const embeddings = await embeddingProvider.embedDocumentChunks(chunks);
+  let embeddings
+  try {
+    embeddings = await embeddingProvider.embedDocumentChunks(chunks);
+  } catch (err) {
+    console.log("Error while embedding doc: ", err);
+    throw new Error("error while embeddings");
+  }
+
+  console.log(embeddings.length);
 
   // Store in vector store
   const vectorStoreProvider = VectorStoreFactory.getInstance(VectorStoreConfig.PINECONE);
-  await vectorStoreProvider.addDocuments(embeddings)
+  try {
+    await vectorStoreProvider.addDocuments(embeddings);
+  } catch (err) {
+    console.log("Error while store embeddings to store: ", err);
+    throw new Error("Error while store embeddings to store");
+  }
 
   return c.json({
     success: true,
