@@ -23,7 +23,7 @@ class OpenAIEmbeddingProvider implements IEmbeddingsProvider {
       encoding_format: 'float'
     });
 
-    return response.data;
+    return response.data.map(i => i.embedding);
   }
 
   async embedQuery(text: string): Promise<number[]> {
