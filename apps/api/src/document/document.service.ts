@@ -1,19 +1,20 @@
-import { Hono } from "hono";
-import { FileTypes } from "./utils/enums";
-import EmbeddingFactory from "./embeddings/embedding.factory";
-import { EmbeddingsModelConfig } from "./embeddings/embedding.types";
-import VectorStoreFactory from "./vector-store/vector-store.factory";
-import { VectorStoreConfig } from "./vector-store/vector-store.types";
+import EmbeddingFactory from "../embeddings/embedding.factory";
+import { EmbeddingsModelConfig } from "../embeddings/embedding.types";
 import { ChunkFile, filePrepareFactory } from "../prepare";
+import { FileTypes } from "../utils/enums";
+import VectorStoreFactory from "../vector-store/vector-store.factory";
+import { VectorStoreConfig } from "../vector-store/vector-store.types";
 
 class DocumentService {
   async index(payload: { filePath: string }) {
+    // File preperation
     const contentSplitter = new ChunkFile(500, 100);
 
+    // Load files
     const loader = filePrepareFactory.createFileLoader(FileTypes.PDF);
-
     const fileContent = await loader.load(payload.filePath);
 
+    // Split loaded content into chunks
     const chunks = await contentSplitter.textSplitter(fileContent);
 
     // Embeddings
@@ -48,11 +49,7 @@ class DocumentService {
       throw new Error("Error while store embeddings to store");
     }
 
-    return c.json({
-      success: true,
-      statusCode: 200,
-      message: "Document indexed successfully!",
-    });
+    return;
   }
 }
 

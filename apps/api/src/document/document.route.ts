@@ -3,6 +3,6 @@ import controller from "./document.controller";
 
 const router = new Hono();
 
-router.post("/index", controller.index(c));
+router.post("/index", (c) => controller.index(c));
 
 export default router;
