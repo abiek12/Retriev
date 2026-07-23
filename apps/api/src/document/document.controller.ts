@@ -1,5 +1,6 @@
 import type { Context } from "hono";
 import documentService from "./document.service";
+import { IndexDocumentDtoType } from "./dto/index-document.dto";
 
 class DocumentController {
   async indexFile(c: Context) {
@@ -15,10 +16,10 @@ class DocumentController {
   }
 
   async indexText(c: Context) {
-    const dto: any = c.body;
-    const type = "text";
+    let body: IndexDocumentDtoType = await c.req.json();
+    body.type = "text";
 
-    await documentService.index({ type, text: dto.textContent });
+    await documentService.index(body);
 
     return c.json({
       success: true,
