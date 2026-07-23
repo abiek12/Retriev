@@ -4,23 +4,33 @@ import { ChunkFile, filePrepareFactory } from "../prepare";
 import { FileTypes } from "../utils/enums";
 import VectorStoreFactory from "../vector-store/vector-store.factory";
 import { VectorStoreConfig } from "../vector-store/vector-store.types";
+import { IndexDocumentDtoType } from "./dto/index-document.dto";
 
 class DocumentService {
-  async index(payload: { filePath: string }) {
+  async index(dto: IndexDocumentDtoType) {
+    let content;
+
+    switch (dto.type) {
+      case "text":
+        content = dto.text;
+        break;
+      case "file":
+        // Load files
+        const loader = filePrepareFactory.createFileLoader(FileTypes.PDF);
+        content = await loader.load(dto.filePath);
+    }
+
     // File preperation
     const contentSplitter = new ChunkFile(500, 100);
 
-    // Load files
-    const loader = filePrepareFactory.createFileLoader(FileTypes.PDF);
-    const fileContent = await loader.load(payload.filePath);
-
     // Split loaded content into chunks
-    const chunks = await contentSplitter.textSplitter(fileContent);
+    const chunks = await contentSplitter.textSplitter(content);
 
     // Embeddings
     const embeddingProvider = EmbeddingFactory.getInstance(
       EmbeddingsModelConfig.OPENAI,
     );
+
     let embeddings;
     try {
       embeddings = await embeddingProvider.embedDocumentChunks(chunks);
