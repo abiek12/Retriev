@@ -3,7 +3,7 @@ import documentService from "./document.service";
 
 class DocumentController {
   async index(c: Context) {
-    const filePath = `${import.meta.dir}/test.pdf`;
+    const filePath = `${import.meta.dir}/../test.pdf`;
 
     await documentService.index({ filePath });
 

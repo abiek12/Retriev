@@ -22,5 +22,9 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@hono/zod-validator": "^0.9.0",
+    "zod": "^4.4.3"
+  }
 }
