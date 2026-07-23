@@ -2,7 +2,7 @@ import { IndexTextDtoType } from "./dto/index-text.dto";
 import textService from "./text.service";
 
 class TextController {
-  async index(c) {
+  async index(c: any) {
     const dto: IndexTextDtoType = c.req.valid("json");
 
     await textService.index(dto);
